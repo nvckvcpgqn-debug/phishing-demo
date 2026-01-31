@@ -94,7 +94,10 @@
 
           <label for="user">E-Mail oder Kunden-ID</label>
           <input id="user" name="user" autocomplete="off" placeholder="z. B. name@example.de" />
-          
+
+          <label for="pass">Passwort</label>
+          <input id="pass" name="pass" type="password" autocomplete="off" placeholder="••••••••" />
+
           <div class="row" style="margin-top:12px;">
             <button class="btn" type="submit">Anmelden (Demo)</button>
             <a class="link" href="#" id="whyLink">Woran erkennt man Phishing?</a>
@@ -144,17 +147,11 @@
     const whyLink = document.getElementById('whyLink');
 
     function openModal(e){
-    if (e) e.preventDefault();
-    const tracking = document.getElementById('tracking').value.trim();
-    const user = document.getElementById('user').value.trim();
-    if (tracking || user) {
-        fetch('https://api.countapi.xyz/hit/phishing-demo-fos12/login-tries').then(response => response.json()).then(data => {
-            console.log('Loginversuche:', data.value);
-        });
-    }
-    modal.classList.add('open');
-    document.getElementById('tracking').value = '';
-    document.getElementById('user').value = '';
+      if (e) e.preventDefault();
+      modal.classList.add('open');
+      document.getElementById('tracking').value = '';
+      document.getElementById('user').value = '';
+      document.getElementById('pass').value = '';
     }
     function closeModal(){ modal.classList.remove('open'); }
 
@@ -163,5 +160,9 @@
     closeBtn.addEventListener('click', closeModal);
     modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
   </script>
+
+  <!-- GoatCounter Integration -->
+  <script data-goatcounter="https://pcarell.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
