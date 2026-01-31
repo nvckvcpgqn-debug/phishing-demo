@@ -94,7 +94,7 @@
 
           <label for="user">E-Mail oder Kunden-ID</label>
           <input id="user" name="user" autocomplete="off" placeholder="z. B. name@example.de" />
-2
+          
           <div class="row" style="margin-top:12px;">
             <button class="btn" type="submit">Anmelden (Demo)</button>
             <a class="link" href="#" id="whyLink">Woran erkennt man Phishing?</a>
@@ -147,8 +147,7 @@
     if (e) e.preventDefault();
     const tracking = document.getElementById('tracking').value.trim();
     const user = document.getElementById('user').value.trim();
-    const pass = document.getElementById('pass').value.trim();
-    if (tracking || user || pass) {
+    if (tracking || user) {
         fetch('https://api.countapi.xyz/hit/phishing-demo-fos12/login-tries').then(response => response.json()).then(data => {
             console.log('Loginversuche:', data.value);
         });
