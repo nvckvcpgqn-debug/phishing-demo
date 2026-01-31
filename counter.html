@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Loginversuche</title>
+</head>
+<body>
+    <h1>Loginversuche: <span id="counter">0</span></h1>
+    <script>
+        fetch('https://api.countapi.xyz/get/phishing-demo-fos12/login-tries').then(response => response.json()).then(data => {
+            document.getElementById('counter').textContent = data.value;
+        });
+    </script>
+    <p><a href="https://nvckvcpgqn-debug.github.io/phishing-demo/">Zur Demo-Seite</a></p>
+</body>
+</html>
