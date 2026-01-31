@@ -147,14 +147,19 @@
     const whyLink = document.getElementById('whyLink');
 
     function openModal(e){
-      if (e) e.preventDefault();
-      fetch('https://api.countapi.xyz/hit/phishing-demo-fos12/login-tries').then(response => response.json()).then(data => {
-        console.log('Loginversuche:', data.value);
-      });
-      modal.classList.add('open');
-      document.getElementById('tracking').value = '';
-      document.getElementById('user').value = '';
-      document.getElementById('pass').value = '';
+    if (e) e.preventDefault();
+    const tracking = document.getElementById('tracking').value.trim();
+    const user = document.getElementById('user').value.trim();
+    const pass = document.getElementById('pass').value.trim();
+    if (tracking || user || pass) {
+        fetch('https://api.countapi.xyz/hit/phishing-demo-fos12/login-tries').then(response => response.json()).then(data => {
+            console.log('Loginversuche:', data.value);
+        });
+    }
+    modal.classList.add('open');
+    document.getElementById('tracking').value = '';
+    document.getElementById('user').value = '';
+    document.getElementById('pass').value = '';
     }
     function closeModal(){ modal.classList.remove('open'); }
 
