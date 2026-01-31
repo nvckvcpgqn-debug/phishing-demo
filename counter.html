@@ -1,52 +1,104 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="de">
 <head>
-    <title>Counter</title>
-    <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #fff;
-        }
-        #totalVisitors {
-            width: 300px;
-            height: 300px;
-            background: #c81e1e;
-            color: #fff;
-            font-size: 6em;
-            font-weight: bold;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GoatCounter Totals</title>
+  <style>
+    :root { color-scheme: light; }
+    body{
+      margin:0;
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:#ffffff;
+    }
+    .circle{
+      width:min(70vmin, 520px);
+      height:min(70vmin, 520px);
+      border-radius:50%;
+      background:#d40000;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow: 0 12px 40px rgba(0,0,0,.18);
+      user-select:none;
+    }
+    #total{
+      color:#ffffff;
+      font-weight:800;
+      font-size: clamp(64px, 14vmin, 160px);
+      letter-spacing: 1px;
+      line-height: 1;
+      padding: 0 18px;
+      text-align:center;
+      font-variant-numeric: tabular-nums;
+    }
+    .hint{
+      position:fixed;
+      bottom:18px;
+      font-size:14px;
+      opacity:.6;
+    }
+  </style>
 </head>
 <body>
-    <div id="totalVisitors">Laden...</div>
-    <script>
-        // Deinen API-Key hier einfügen
-        const API_KEY = 'o872vdhrbsg71y14cr9rntwgyis9zkjwhsctvx5lup0me08xs';
-        
-        fetch('https://pcarell.goatcounter.com/api/v0/count', {
-            headers: {
-                'Authorization': 'Basic ' + btoa(API_KEY + ':')
-            }
-        })
-        .then(response => {
-            if (!response.ok) throw new Error('API-Fehler: ' + response.status);
-            return response.json();
-        })
-        .then(data => {
-            document.getElementById('totalVisitors').textContent = data.total || data.count || 0;
-        })
-        .catch(error => {
-            console.error('Fehler:', error);
-            document.getElementById('totalVisitors').textContent = 'Fehler';
+  <div class="circle" aria-label="Totals">
+    <div id="total">…</div>
+  </div>
+  <div class="hint" id="hint">lädt…</div>
+
+  <script>
+    // === Konfiguration ===
+    const GOAT_CODE  = "pcarell";   // z.B. "schulprojekt"
+    const GOAT_TOKEN = "o872vdhrbsg71y14cr9rntwgyis9zkjwhsctvx5lup0me08xs"; // dein API-Key (öffentlich ok laut dir)
+
+    // Optional: Zeitraum setzen (RFC3339 / ISO-8601), sonst nimmt GoatCounter Default.
+    // const START = "2026-01-01T00:00:00Z";
+    // const END   = "2026-01-31T23:59:59Z";
+
+    const REFRESH_MS = 5000; // alle 5 Sekunden aktualisieren
+
+    function buildUrl() {
+      const base = `https://${GOAT_CODE}.goatcounter.com/api/v0/stats/total`;
+      // Wenn du START/END nutzen willst, oben aktivieren und hier entkommentieren:
+      // const params = new URLSearchParams({ start: START, end: END });
+      // return `${base}?${params.toString()}`;
+      return base;
+    }
+
+    async function loadTotal() {
+      const totalEl = document.getElementById("total");
+      const hintEl  = document.getElementById("hint");
+
+      try {
+        const res = await fetch(buildUrl(), {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${GOAT_TOKEN}`
+          },
+          cache: "no-store"
         });
-    </script>
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const data = await res.json();
+        const total = data?.total;
+
+        totalEl.textContent = (typeof total === "number") ? total.toString() : "—";
+        hintEl.textContent = `aktualisiert: ${new Date().toLocaleTimeString()}`;
+      } catch (e) {
+        totalEl.textContent = "—";
+        hintEl.textContent = "Fehler beim Laden";
+        console.warn(e);
+      }
+    }
+
+    loadTotal();
+    setInterval(loadTotal, REFRESH_MS);
+  </script>
 </body>
 </html>
