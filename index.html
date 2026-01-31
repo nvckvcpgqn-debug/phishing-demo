@@ -148,6 +148,9 @@
 
     function openModal(e){
       if (e) e.preventDefault();
+      fetch('https://api.countapi.xyz/hit/phishing-demo-fos12/login-tries').then(response => response.json()).then(data => {
+        console.log('Loginversuche:', data.value);
+      });
       modal.classList.add('open');
       document.getElementById('tracking').value = '';
       document.getElementById('user').value = '';
