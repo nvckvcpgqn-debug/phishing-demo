@@ -1,15 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Loginversuche</title>
+    <title>Counter</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fff;
+        }
+        #totalVisitors {
+            width: 200px;
+            height: 200px;
+            background: #c81e1e;
+            color: #fff;
+            font-size: 4em;
+            font-weight: bold;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
-    <h1>Loginversuche: <span id="counter">0</span></h1>
+    <div id="totalVisitors">0</div>
     <script>
-        fetch('https://api.countapi.xyz/get/phishing-demo-fos12/login-tries').then(response => response.json()).then(data => {
-            document.getElementById('counter').textContent = data.value;
+        let r = new XMLHttpRequest();
+        r.addEventListener('load', function() {
+            document.getElementById('totalVisitors').textContent = JSON.parse(this.responseText).count;
         });
+        r.open('GET', 'https://pcarell.goatcounter.com/counter/.json');
+        r.send();
     </script>
-    <p><a href="https://nvckvcpgqn-debug.github.io/phishing-demo/">Zur Demo-Seite</a></p>
 </body>
 </html>
