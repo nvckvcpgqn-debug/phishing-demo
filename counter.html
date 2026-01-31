@@ -26,19 +26,22 @@
     </style>
 </head>
 <body>
-    <div id="totalVisitors">0</div>
+    <div id="totalVisitors">Laden...</div>
     <script>
         // Deinen API-Key hier einfügen
         const API_KEY = 'o872vdhrbsg71y14cr9rntwgyis9zkjwhsctvx5lup0me08xs';
         
-        fetch('https://pcarell.goatcounter.com/api/v0/count/total', {
+        fetch('https://pcarell.goatcounter.com/api/v0/count', {
             headers: {
                 'Authorization': 'Basic ' + btoa(API_KEY + ':')
             }
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) throw new Error('API-Fehler: ' + response.status);
+            return response.json();
+        })
         .then(data => {
-            document.getElementById('totalVisitors').textContent = data.count;
+            document.getElementById('totalVisitors').textContent = data.total || data.count || 0;
         })
         .catch(error => {
             console.error('Fehler:', error);
