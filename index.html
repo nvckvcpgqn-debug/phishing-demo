@@ -1,13 +1,164 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Phishing-Demo</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Paketstatus – Demo</title>
+  <style>
+    :root { --brand:#c81e1e; --bg:#f6f7f9; --text:#1a1a1a; --muted:#666; }
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:var(--bg); color:var(--text); }
+    .demo-banner {
+      background:#111; color:#fff; padding:10px 14px; font-weight:800; letter-spacing:.4px;
+      text-align:center; position:sticky; top:0; z-index:10;
+    }
+    .demo-banner span { color:#ffdd55; }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 22px 14px 40px; }
+    .topbar {
+      background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:16px 18px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .brand { display:flex; align-items:center; gap:10px; font-weight:800; }
+    .brand .mark {
+      width:34px; height:34px; border-radius:10px; background:var(--brand);
+      display:grid; place-items:center; color:#fff; font-weight:900;
+    }
+    .brand small { display:block; font-weight:600; color:var(--muted); margin-top:2px; }
+    .hint { color:var(--muted); font-size:14px; text-align:right; }
+    .grid { display:grid; grid-template-columns: 1.1fr .9fr; gap:16px; margin-top:16px; }
+    @media (max-width: 860px){ .grid{ grid-template-columns:1fr; } .hint{ text-align:left; } }
+    .card { background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:18px; }
+    h1 { font-size:22px; margin:0 0 8px; }
+    p { margin:0 0 10px; color:var(--muted); line-height:1.45; }
+    .alert {
+      border-left:4px solid var(--brand); background:#fff5f5; padding:12px 12px; border-radius:10px;
+      color:#7a1212; margin:10px 0 14px; font-weight:700;
+    }
+    label { display:block; font-weight:700; margin:10px 0 6px; }
+    input {
+      width:100%; box-sizing:border-box; padding:11px 12px; border:1px solid #d1d5db; border-radius:10px;
+      font-size:15px; outline:none;
+    }
+    input:focus { border-color:#9ca3af; box-shadow: 0 0 0 3px rgba(200,30,30,.12); }
+    .row { display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+    .btn {
+      background:var(--brand); color:#fff; border:none; border-radius:10px; padding:11px 14px;
+      font-weight:800; cursor:pointer;
+    }
+    .btn:active { transform: translateY(1px); }
+    .link { color:var(--brand); font-weight:700; text-decoration:none; }
+    .link:hover { text-decoration:underline; }
+    .fineprint { font-size:12px; color:#777; margin-top:10px; }
+    .badges { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+    .badge { font-size:12px; padding:6px 10px; border-radius:999px; background:#f3f4f6; border:1px solid #e5e7eb; color:#444; }
+    .checklist li { margin:8px 0; color:#333; }
+    .checklist strong { color:#111; }
+    .modal {
+      position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; padding:14px;
+    }
+    .modal.open { display:flex; }
+    .modal .box {
+      max-width:640px; width:100%; background:#fff; border-radius:14px; padding:18px; border:1px solid #e5e7eb;
+    }
+    .box h2 { margin:0 0 8px; }
+    .box p { margin:0 0 10px; }
+    .box .row { justify-content:flex-end; }
+  </style>
 </head>
-<body style="font-family: Arial; text-align: center; margin-top: 80px;">
-  <h1>⚠️ Erwischt!</h1>
-  <p>Das war ein Phishing-Beispiel.</p>
-  <p>So einfach kann man auf gefälschte Seiten hereinfalle​n.</p>
-  <p><strong>Merke:</strong> Keine seriöse Firma fordert Login-Daten per QR-Code an.</p>
+<body>
+  <div class="demo-banner">⚠️ <span>PHISHING-DEMO</span> für Unterricht/Präsentation – keine echte Sendung, keine echte Firma, keine Datenerfassung</div>
+
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="mark">P</div>
+        <div>
+          Paketportal <small>Sendungsverwaltung (Demo)</small>
+        </div>
+      </div>
+      <div class="hint">
+        Hinweis: echte Anbieter verlangen keinen Login per QR-Code<br />
+        <span style="font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;">https://… (Demo-Seite)</span>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h1>Sendung verpasst? Zustellung bestätigen</h1>
+        <p>Geben Sie die Sendungsnummer von der Benachrichtigungskarte ein und melden Sie sich an (Simulation).</p>
+
+        <div class="alert">ACHTUNG: Trainings-Seite. Bitte keine echten Daten eingeben.</div>
+
+        <form id="loginForm">
+          <label for="tracking">Sendungsnummer</label>
+          <input id="tracking" name="tracking" autocomplete="off" placeholder="z. B. ZM1T16" />
+
+          <label for="user">E-Mail oder Kunden-ID</label>
+          <input id="user" name="user" autocomplete="off" placeholder="z. B. name@example.de" />
+
+          <label for="pass">Passwort</label>
+          <input id="pass" name="pass" type="password" autocomplete="off" placeholder="••••••••" />
+
+          <div class="row" style="margin-top:12px;">
+            <button class="btn" type="submit">Anmelden (Demo)</button>
+            <a class="link" href="#" id="whyLink">Woran erkennt man Phishing?</a>
+          </div>
+
+          <div class="fineprint">
+            Es werden keine Eingaben gespeichert oder übertragen. Der Button zeigt eine Aufklärungsmeldung.
+          </div>
+        </form>
+
+        <div class="badges">
+          <div class="badge">QR-Code als Einstieg</div>
+          <div class="badge">Zeitdruck</div>
+          <div class="badge">Login-Anforderung</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h1>Checkliste: rote Flaggen</h1>
+        <p>Diese Punkte kannst du direkt am Beispiel erklären:</p>
+        <ul class="checklist">
+          <li><strong>Dringlichkeit</strong> („24 Stunden“, „sofort handeln“)</li>
+          <li><strong>Sendungsnummer + Login</strong> – unnötige Hürde</li>
+          <li><strong>QR-Code</strong> statt offizieller App</li>
+          <li><strong>Unklare URL</strong> oder Tippfehler</li>
+          <li><strong>Ungewöhnliche Aufforderung</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="box">
+      <h2>Erwischt ✅ Das war eine Phishing-Demo</h2>
+      <p>In echten Angriffen würden hier Sendungsnummer und Zugangsdaten abgegriffen.</p>
+      <p><strong>Merke:</strong> Keine seriöse Zustellung verlangt per QR-Code eine Konto-Anmeldung.</p>
+      <div class="row">
+        <button class="btn" id="closeBtn" type="button">Verstanden</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById('modal');
+    const form = document.getElementById('loginForm');
+    const closeBtn = document.getElementById('closeBtn');
+    const whyLink = document.getElementById('whyLink');
+
+    function openModal(e){
+      if (e) e.preventDefault();
+      modal.classList.add('open');
+      document.getElementById('tracking').value = '';
+      document.getElementById('user').value = '';
+      document.getElementById('pass').value = '';
+    }
+    function closeModal(){ modal.classList.remove('open'); }
+
+    form.addEventListener('submit', openModal);
+    whyLink.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+  </script>
 </body>
 </html>
