@@ -138,10 +138,23 @@
   </div>
 
   <script>
+    // === CountAPI Konfiguration (muss zu counter.html passen) ===
+    const COUNT_NS  = "pcarell-demo";
+    const COUNT_KEY = "login_attempts";
+
     const modal = document.getElementById('modal');
     const form = document.getElementById('loginForm');
     const closeBtn = document.getElementById('closeBtn');
     const whyLink = document.getElementById('whyLink');
+
+    async function countLoginAttempt() {
+      try {
+        const url = `https://api.countapi.xyz/hit/${encodeURIComponent(COUNT_NS)}/${encodeURIComponent(COUNT_KEY)}`;
+        await fetch(url, { cache: "no-store" });
+      } catch (e) {
+        console.warn("CountAPI nicht erreichbar", e);
+      }
+    }
 
     function openModal(e){
       if (e) e.preventDefault();
@@ -151,14 +164,15 @@
     }
     function closeModal(){ modal.classList.remove('open'); }
 
-    form.addEventListener('submit', openModal);
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await countLoginAttempt();   // +1 zählen
+      openModal();                 // dann Aufklärung zeigen
+    });
+
     whyLink.addEventListener('click', openModal);
     closeBtn.addEventListener('click', closeModal);
     modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
   </script>
-
-  <!-- GoatCounter Integration -->
-  <script data-goatcounter="https://pcarell.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
