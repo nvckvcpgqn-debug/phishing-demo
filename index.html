@@ -166,11 +166,21 @@
     }
     function closeModal(){ modal.classList.remove('open'); }
 
-    form.addEventListener('submit', async (e) => {
+    <script>
+      form.addEventListener('submit', async (e) => {
       e.preventDefault();
+
+      const tracking = document.getElementById('tracking').value.trim();
+      const user     = document.getElementById('user').value.trim();
+
+      // Nur zählen, wenn mindestens ein Feld ausgefüllt ist
+      if (tracking !== "" || user !== "") {
       await countLoginAttempt();
+      }
+
       openModal();
     });
+  </script>
 
     whyLink.addEventListener('click', openModal);
     closeBtn.addEventListener('click', closeModal);
