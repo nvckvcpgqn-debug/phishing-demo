@@ -20,25 +20,27 @@
       height:min(70vmin, 520px);
       border-radius:50%;
       background:#d40000;
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      display:grid;
+      place-items:center;
       box-shadow: 0 12px 40px rgba(0,0,0,.18);
       user-select:none;
     }
+
     #total{
+      /* Optische Feineinstellung (erstmal 0 lassen!) */
+      --opt-x: 0px;
+      --opt-y: 0px;
       color:#ffffff;
       font-weight:800;
       font-size: clamp(200px, 50vmin, 520px);
-      letter-spacing: 0.02em;
       line-height: 1;
+      margin: 0;
+      padding: 0;
       text-align:center;
       font-variant-numeric: tabular-nums;
-      /* 🔧 optische Zentrierung */
-      transform: translateY(0.085em);
-      /* verhindert seitliches „Wandern“ bei 1/2/3-stelligen Zahlen */
-      min-width: 2.6ch;
-      }
+      /* absolut stabil zentriert */
+      transform: translate(var(--opt-x), var(--opt-y));
+    }
 
     .hint{
       position:fixed;
