@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>CountAPI Totals</title>
+  <title>Totals</title>
   <style>
     :root { color-scheme: light; }
     body{
@@ -51,15 +51,12 @@
   <div class="hint" id="hint">lädt…</div>
 
   <script>
-    // === CountAPI Konfiguration (muss zu index.html passen) ===
-    const COUNT_NS  = "pcarell-demo";
-    const COUNT_KEY = "login_attempts";
+    const COUNT_KEY = "nvckvcpqqn-phishing-demo-login-attempts";
+    const BASE = "https://countapi.mileshilliard.com/api/v1";
+    const REFRESH_MS = 5000;
 
-    const REFRESH_MS = 5000; // alle 5 Sekunden aktualisieren
-
-    function buildUrl() {
-      // "get" liest nur aus (ohne hochzuzählen)
-      return `https://api.countapi.xyz/get/${encodeURIComponent(COUNT_NS)}/${encodeURIComponent(COUNT_KEY)}`;
+    function urlGet() {
+      return `${BASE}/get/${encodeURIComponent(COUNT_KEY)}`;
     }
 
     async function loadTotal() {
@@ -67,16 +64,25 @@
       const hintEl  = document.getElementById("hint");
 
       try {
-        const res = await fetch(buildUrl(), { cache: "no-store" });
+        const res = await fetch(urlGet(), { cache: "no-store" });
+
+        // Bei diesem Service kann "key not found" als 404 kommen
+        if (res.status === 404) {
+          totalEl.textContent = "0";
+          hintEl.textContent = `aktualisiert: ${new Date().toLocaleTimeString()}`;
+          return;
+        }
+
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
         const data = await res.json();
-        const total = data?.value;
+        const raw = data?.value;
+        const total = (typeof raw === "string") ? Number(raw) : raw;
 
-        totalEl.textContent = (typeof total === "number") ? total.toString() : "—";
+        totalEl.textContent = Number.isFinite(total) ? String(total) : "0";
         hintEl.textContent = `aktualisiert: ${new Date().toLocaleTimeString()}`;
       } catch (e) {
-        totalEl.textContent = "—";
+        totalEl.textContent = "0";
         hintEl.textContent = "Fehler beim Laden";
         console.warn(e);
       }
