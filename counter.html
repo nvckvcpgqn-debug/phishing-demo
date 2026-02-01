@@ -30,13 +30,16 @@
       color:#ffffff;
       font-weight:800;
       font-size: clamp(200px, 50vmin, 520px);
-      letter-spacing: 1px;
+      letter-spacing: 0.02em;
       line-height: 1;
-      padding: 0 18px;
       text-align:center;
       font-variant-numeric: tabular-nums;
-      transform: translateY(0.06em);
-    }
+      /* 🔧 optische Zentrierung */
+      transform: translateY(0.085em);
+      /* verhindert seitliches „Wandern“ bei 1/2/3-stelligen Zahlen */
+      min-width: 2.6ch;
+      }
+
     .hint{
       position:fixed;
       bottom:18px;
