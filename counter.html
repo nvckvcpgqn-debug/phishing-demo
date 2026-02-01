@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>GoatCounter Totals</title>
+  <title>CountAPI Totals</title>
   <style>
     :root { color-scheme: light; }
     body{
@@ -51,22 +51,15 @@
   <div class="hint" id="hint">lädt…</div>
 
   <script>
-    // === Konfiguration ===
-    const GOAT_CODE  = "pcarell";   // z.B. "schulprojekt"
-    const GOAT_TOKEN = "6bur3fhgbyet1uw1suao6cm3e1jqddwdip8rrf1f6bsmbfhmyy1"; // dein API-Key (öffentlich ok laut dir)
-
-    // Optional: Zeitraum setzen (RFC3339 / ISO-8601), sonst nimmt GoatCounter Default.
-    // const START = "2026-01-01T00:00:00Z";
-    // const END   = "2026-01-31T23:59:59Z";
+    // === CountAPI Konfiguration (muss zu index.html passen) ===
+    const COUNT_NS  = "pcarell-demo";
+    const COUNT_KEY = "login_attempts";
 
     const REFRESH_MS = 5000; // alle 5 Sekunden aktualisieren
 
     function buildUrl() {
-      const base = `https://${GOAT_CODE}.goatcounter.com/api/v0/stats/total`;
-      // Wenn du START/END nutzen willst, oben aktivieren und hier entkommentieren:
-      // const params = new URLSearchParams({ start: START, end: END });
-      // return `${base}?${params.toString()}`;
-      return base;
+      // "get" liest nur aus (ohne hochzuzählen)
+      return `https://api.countapi.xyz/get/${encodeURIComponent(COUNT_NS)}/${encodeURIComponent(COUNT_KEY)}`;
     }
 
     async function loadTotal() {
@@ -74,19 +67,11 @@
       const hintEl  = document.getElementById("hint");
 
       try {
-        const res = await fetch(buildUrl(), {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${GOAT_TOKEN}`
-          },
-          cache: "no-store"
-        });
-
+        const res = await fetch(buildUrl(), { cache: "no-store" });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
         const data = await res.json();
-        const total = data?.total;
+        const total = data?.value;
 
         totalEl.textContent = (typeof total === "number") ? total.toString() : "—";
         hintEl.textContent = `aktualisiert: ${new Date().toLocaleTimeString()}`;
