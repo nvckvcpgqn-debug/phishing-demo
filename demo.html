@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kundenkonto – Demo</title>
+  <style>
+    :root{
+      --demo-black:#111;
+      --demo-warn:#ffdd55;
+
+      --yellow:#ffcc00;
+      --yellow-2:#ffe07a;
+      --red:#d40000;
+
+      --bg:#ffffff;
+      --text:#111;
+      --muted:#5a5a5a;
+
+      --radius: 14px;
+      --shadow: 0 14px 42px rgba(0,0,0,.18);
+    }
+
+    *{ box-sizing:border-box; }
+    html, body { height: 100%; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background: var(--bg);
+      overflow: hidden; /* Ziel: keine Scrollbars */
+    }
+
+    /* Seite als Vollbild-Layout */
+    .page{
+      min-height: 100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* Demo-Banner (beibehalten) */
+    .demo-banner{
+      background:var(--demo-black);
+      color:#fff;
+      padding:10px 14px; /* kompakter */
+      font-weight:900;
+      letter-spacing:.35px;
+      text-align:left;
+      border-bottom: 2px solid rgba(255,255,255,.12);
+      flex: 0 0 auto;
+    }
+    .demo-banner .warn{
+      color:var(--demo-warn);
+      margin-right:10px;
+    }
+
+    /* Header */
+    header{
+      background: linear-gradient(0deg, var(--yellow-2), var(--yellow));
+      border-bottom: 1px solid rgba(0,0,0,.08);
+      flex: 0 0 auto;
+    }
+    .header-inner{
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 10px 14px; /* kompakter */
+      display:flex;
+      align-items:center;
+      gap:14px;
+    }
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width: 190px;
+    }
+    .logo-badge{
+      width:44px;
+      height:30px;
+      border-radius:10px;
+      background: var(--red);
+      display:grid;
+      place-items:center;
+      color:#fff;
+      font-weight:1000;
+      letter-spacing:.5px;
+      font-size: 12px;
+    }
+    .logo-text{
+      font-weight:1000;
+      letter-spacing:.35px;
+      line-height:1.05;
+      font-size: 14px;
+    }
+    .logo-text small{
+      display:block;
+      font-weight:800;
+      opacity:.78;
+      letter-spacing:.2px;
+      margin-top:2px;
+      font-size: 12px;
+    }
+
+    nav{
+      display:flex;
+      gap:12px;
+      flex:1;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+    nav a{
+      color:#111;
+      text-decoration:none;
+      font-weight:900;
+      padding:6px 8px;
+      border-radius: 10px;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    nav a:hover{ background: rgba(255,255,255,.55); }
+
+    .header-actions{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      justify-content:flex-end;
+      min-width: 170px;
+    }
+    .pill{
+      background: rgba(255,255,255,.65);
+      border:1px solid rgba(0,0,0,.10);
+      padding:6px 10px;
+      border-radius: 999px;
+      font-weight:900;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    /* Kompakter Hero: gelb + rot */
+    .hero{
+      background: var(--yellow);
+      color: var(--red);
+      border-bottom: 1px solid rgba(0,0,0,.12);
+      flex: 0 0 auto;
+    }
+    .hero-inner{
+      max-width: 1160px;
+      margin:0 auto;
+      padding: 14px 14px 12px; /* sehr kompakt */
+    }
+    .hero-card{
+      max-width: 980px;
+    }
+    .kicker{
+      font-size: 18px;
+      letter-spacing:.6px;
+      font-weight:1000;
+      text-transform: uppercase;
+      margin: 0 0 4px;
+      color: var(--red);
+    }
+    .hero-title{
+      font-size: clamp(20px, 2.1vw, 28px);
+      line-height:1.15;
+      font-weight: 1000;
+      margin:0;
+      color: var(--red);
+    }
+
+    /* Main */
+    main{
+      flex: 1 1 auto;
+      overflow: hidden; /* keine Scrollbars */
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+    }
+    .wrap{
+      width: 100%;
+      max-width: 1160px;
+      padding: 12px 14px 18px; /* kompakter */
+      display:flex;
+      justify-content:flex-start;
+      gap: 14px;
+    }
+
+    .form-box{
+      width: min(560px, 100%);
+      background:#fff;
+      border: 1px solid rgba(0,0,0,.10);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 30px rgba(0,0,0,.10);
+      padding: 14px; /* kompakter */
+    }
+
+    .form-title{
+      font-size: 20px;
+      margin: 0 0 8px;
+      font-weight:1000;
+      letter-spacing:.2px;
+    }
+    .form-note{
+      margin: 0 0 10px;
+      color: var(--muted);
+      line-height:1.35;
+      font-weight:650;
+      font-size: 13px;
+    }
+
+    label{
+      display:block;
+      font-weight:900;
+      margin: 8px 0 5px;
+      font-size: 13px;
+    }
+    input{
+      width:100%;
+      padding: 10px 11px;
+      border-radius: 12px;
+      border: 1px solid rgba(0,0,0,.18);
+      outline:none;
+      font-size: 15px;
+      background:#fff;
+    }
+    input:focus{
+      border-color: rgba(212,0,0,.55);
+      box-shadow: 0 0 0 4px rgba(212,0,0,.12);
+    }
+
+    .row{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:flex-start;
+      flex-wrap:wrap;
+      margin-top: 12px;
+    }
+
+    .btn{
+      background: var(--red);
+      color:#fff;
+      border:none;
+      border-radius: 12px;
+      padding: 11px 14px;
+      font-weight:1000;
+      cursor:pointer;
+      box-shadow: 0 10px 22px rgba(212,0,0,.22);
+      font-size: 14px;
+    }
+    .btn:active{ transform: translateY(1px); }
+
+    .link{
+      color: var(--red);
+      font-weight:900;
+      text-decoration:none;
+      font-size: 14px;
+    }
+    .link:hover{ text-decoration:underline; }
+
+    .fineprint{
+      margin-top: 8px;
+      font-size: 12px;
+      color:#666;
+      font-weight:650;
+    }
+
+    /* Modal */
+    .modal{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 14px;
+      z-index: 80;
+    }
+    .modal.open{ display:flex; }
+    .modal .box{
+      width: min(680px, 100%);
+      background:#fff;
+      border-radius: 16px;
+      padding: 18px;
+      border: 1px solid rgba(0,0,0,.12);
+      box-shadow: var(--shadow);
+    }
+    .box h2{ margin: 0 0 8px; font-weight:1000; }
+    .box p{ margin: 0 0 10px; color:#333; line-height:1.45; font-weight:650; }
+    .box .row{ justify-content:flex-end; }
+
+    /* Responsive: auf kleineren Displays Navigation kompakter + Overflow erlauben */
+    @media (max-width: 900px){
+      body{ overflow:auto; }     /* auf sehr kleinen Geräten lieber scrollen als quetschen */
+      .wrap{ flex-direction:column; }
+      nav{ justify-content:flex-start; }
+      .header-actions{ min-width: 0; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <div class="demo-banner"><span class="warn">⚠️</span>PHISHING-DEMO (TRAINING) – keine echte Firma, keine echte Anmeldung, keine Datenerfassung</div>
+
+    <header>
+      <div class="header-inner">
+        <div class="logo" aria-label="Demo-Branding">
+          <div class="logo-badge">DEMO</div>
+          <div class="logo-text">
+            Paketservice Demo
+            <small>Trainingsumgebung</small>
+          </div>
+        </div>
+
+        <nav aria-label="Navigation (Demo)">
+          <a href="#" onclick="return false;">Pakete versenden</a>
+          <a href="#" onclick="return false;">Pakete empfangen</a>
+          <a href="#" onclick="return false;">Hilfe & Kontakt</a>
+        </nav>
+
+        <div class="header-actions">
+          <div class="pill">🔎</div>
+          <div class="pill">👤 Login</div>
+          <div class="pill">DE ▾</div>
+        </div>
+      </div>
+    </header>
+
+    <section class="hero" aria-label="Hero (Demo)">
+      <div class="hero-inner">
+        <div class="hero-card">
+          <div class="kicker">KUNDENKONTO</div>
+          <h1 class="hero-title">Alle Services zum Empfang und Versand Ihrer Pakete</h1>
+        </div>
+      </div>
+    </section>
+
+    <main>
+      <div class="wrap">
+        <section aria-label="Kundenkonto Formular (Demo)">
+          <div class="form-box">
+            <h2 class="form-title">Kundenkonto</h2>
+            <p class="form-note">
+              Diese Seite ist eine <strong>Demo für Training/Präsentation</strong>. Du kannst etwas eingeben oder nichts – der Hinweis erscheint immer.
+            </p>
+
+            <form id="loginForm">
+              <label for="tracking">Sendungsnummer (Demo)</label>
+              <input id="tracking" name="tracking" autocomplete="off" placeholder="ZM1T16" />
+
+              <label for="user">E-Mail oder Kunden-ID (Demo)</label>
+              <input id="user" name="user" autocomplete="off" placeholder="z. B. name@example.de" />
+
+              <div class="row">
+                <button class="btn" type="submit">Absenden (Demo)</button>
+                <a class="link" href="#" id="whyLink">Woran erkennt man Phishing?</a>
+              </div>
+
+              <div class="fineprint">
+                Gezählt wird nur, wenn mindestens ein Feld ausgefüllt ist. Es werden keine Eingaben gespeichert oder übertragen.
+              </div>
+            </form>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <div class="modal" id="modal" aria-hidden="true">
+      <div class="box" role="dialog" aria-modal="true">
+        <h2>Erwischt ✅ Das war eine Phishing-Demo</h2>
+        <p>In echten Angriffen würden hier Sendungsnummer und E-Mail Adresse abgegriffen.</p>
+        <p><strong>Merke:</strong> Keine seriöse Zustellung verlangt per QR-Code eine Konto-Anmeldung.</p>
+        <div class="row">
+          <button class="btn" id="closeBtn" type="button">Verstanden</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Counter: countapi.mileshilliard.com (bei dir funktionierend)
+    const COUNT_KEY = "nvckvcpqqn-phishing-demo-login-attempts";
+    const BASE = "https://countapi.mileshilliard.com/api/v1";
+
+    const modal = document.getElementById('modal');
+    const form = document.getElementById('loginForm');
+    const closeBtn = document.getElementById('closeBtn');
+    const whyLink = document.getElementById('whyLink');
+
+    function openModal(e){
+      if (e) e.preventDefault();
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+    function closeModal(){
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+    async function countLoginAttempt() {
+      try {
+        const url = `${BASE}/hit/${encodeURIComponent(COUNT_KEY)}`;
+        await fetch(url, { cache: "no-store" });
+      } catch (e) {
+        console.warn("Counter API nicht erreichbar", e);
+      }
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const tracking = document.getElementById('tracking').value.trim();
+      const user = document.getElementById('user').value.trim();
+
+      // Modal IMMER anzeigen
+      openModal();
+
+      // Nur zählen, wenn mindestens ein Feld gefüllt ist
+      if (tracking !== "" || user !== "") {
+        await countLoginAttempt();
+      }
+
+      // Optional: Felder leeren
+      document.getElementById('tracking').value = '';
+      document.getElementById('user').value = '';
+    });
+
+    whyLink.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+    // Sicherheitsnetz: falls Viewport sehr niedrig ist, erlaube Scrollen statt abgeschnittenem Inhalt
+    function adjustOverflowForSmallHeights(){
+      if (window.innerHeight < 720) document.body.style.overflow = "auto";
+      else document.body.style.overflow = "hidden";
+    }
+    window.addEventListener("resize", adjustOverflowForSmallHeights);
+    adjustOverflowForSmallHeights();
+  </script>
+</body>
+</html>
