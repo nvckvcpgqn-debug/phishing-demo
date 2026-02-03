@@ -27,20 +27,27 @@
     }
 
     #total{
-      /* Optische Feineinstellung (erstmal 0 lassen!) */
-      --opt-x: 0px;
-      --opt-y: 0px;
-      color:#ffffff;
-      font-weight:800;
-      font-size: clamp(200px, 50vmin, 520px);
-      line-height: 1;
-      margin: 0;
-      padding: 0;
-      text-align:center;
-      font-variant-numeric: tabular-nums;
-      /* absolut stabil zentriert */
-      transform: translate(var(--opt-x), var(--opt-y));
-    }
+  /* Optische Feineinstellung (bei Bedarf anpassen) */
+  --opt-x: 0em;
+  --opt-y: -0.06em; /* hebt die Ziffer minimal an (wirkt optisch zentriert) */
+
+  color:#ffffff;
+  font-weight:800;
+  font-size: clamp(200px, 50vmin, 520px);
+
+  /* Stabil zentrieren unabhängig von Font-Baseline */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  line-height: 1;
+  margin: 0;
+  padding: 0;
+  text-align:center;
+  font-variant-numeric: tabular-nums;
+
+  transform: translate(var(--opt-x), var(--opt-y));
+}
 
     .hint{
       position:fixed;
