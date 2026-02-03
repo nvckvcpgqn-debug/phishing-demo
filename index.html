@@ -305,9 +305,9 @@
     <header>
       <div class="header-inner">
         <div class="logo" aria-label="Demo-Branding">
-          <div class="logo-badge">DEMO</div>
+          <div class="logo-badge"><em>DHL</em></div>
           <div class="logo-text">
-            Paketservice Demo
+            <em>DHL</em> Paketservice Demo
             <small>Trainingsumgebung</small>
           </div>
         </div>
@@ -340,25 +340,33 @@
         <section aria-label="Kundenkonto Formular (Demo)">
           <div class="form-box">
             <h2 class="form-title">Kundenkonto</h2>
-            <p class="form-note">
-              Diese Seite ist eine <strong>Demo für Training/Präsentation</strong>. Du kannst etwas eingeben oder nichts – der Hinweis erscheint immer.
-            </p>
+			<p>
+			Bitte gib deine Daten ein. Dieser Service ist für deine Sendung
+			<span style="color:#d40000;font-weight:900;">24&nbsp;Stunden</span> nach Erhalt gültig!
+			<span style="font-size:0.85em;color:#777;">
+			(Diese Seite ist eine Demo für Training/Präsentation)
+			</span>
+			</p>
 
             <form id="loginForm">
               <label for="tracking">Sendungsnummer (Demo)</label>
-              <input id="tracking" name="tracking" autocomplete="off" placeholder="z. B. ABC123" />
+              <input id="tracking" name="tracking" autocomplete="off" placeholder="ZM1T16" />
 
               <label for="user">E-Mail oder Kunden-ID (Demo)</label>
-              <input id="user" name="user" autocomplete="off" placeholder="z. B. name@example.de" />
+              <input id="user" name="user" autocomplete="off" placeholder="name@beispiel.de" />
 
               <div class="row">
                 <button class="btn" type="submit">Abschicken (Demo)</button>
-                <a class="link" href="#" id="whyLink">Woran erkennt man Phishing?</a>
+                <a
+				class="link"
+				href="https://www.verbraucherzentrale.de/wissen/digitale-welt/phishingradar"
+				target="_blank"
+				rel="noopener noreferrer"
+				id="whyLink">
+				Woran erkennt man Phishing?
+				</a>
               </div>
 
-              <div class="fineprint">
-                Gezählt wird nur, wenn mindestens ein Feld ausgefüllt ist. Es werden keine Eingaben gespeichert oder übertragen.
-              </div>
             </form>
           </div>
         </section>
@@ -385,7 +393,7 @@
     const modal = document.getElementById('modal');
     const form = document.getElementById('loginForm');
     const closeBtn = document.getElementById('closeBtn');
-    const whyLink = document.getElementById('whyLink');
+    
 
     function openModal(e){
       if (e) e.preventDefault();
@@ -425,7 +433,7 @@
       document.getElementById('user').value = '';
     });
 
-    whyLink.addEventListener('click', openModal);
+    // whyLink.addEventListener('click', openModal);
     closeBtn.addEventListener('click', closeModal);
     modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
